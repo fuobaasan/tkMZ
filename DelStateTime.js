@@ -36,18 +36,21 @@ Game_BattlerBase.prototype.clearStates = function() {
     this._stateTimes = {};
 };
 
+    /* 時間の初期値を設定。時間指定ない場合は負の値 */
     const _Game_BattlerBase_resetStateCounts = Game_BattlerBase.prototype.resetStateCounts;
 Game_BattlerBase.prototype.resetStateCounts = function(stateId) {
     var stTime = PluginManagerEx.findMetaValue($dataStates[stateId], "time");
     if (stTime === void 0) {
         stTime = -100;
     }
-
     this._stateTimes[stateId] = stTime;
+
+    _Game_BattlerBase_resetStateCounts.call(this,stateId);
 };
 
 
 
+    /* バトラーが生きていたら時間減らす関数を呼ぶ */
 const _Game_Battler_updateTpb = Game_Battler.prototype.updateTpb;
 Game_Battler.prototype.updateTpb = function() {
 
@@ -58,10 +61,8 @@ Game_Battler.prototype.updateTpb = function() {
 };
 
 
-
-    //const _Game_Battler_updateTpbChargeTime = Game_Battler.prototype.updateTpbChargeTime;
-    Game_Battler.prototype.updateStateTime = function() {
-        //Game_Battler.prototype.updateTpbChargeTime = function() {
+    /* 時間を減らし、０になったら解除させる */
+Game_Battler.prototype.updateStateTime = function() {
 
     for (const stateId of this._states) {
 
@@ -74,7 +75,6 @@ Game_Battler.prototype.updateTpb = function() {
 
         }
     }
-    //_Game_Battler_updateTpbChargeTime.call(this);
 }
 
 
